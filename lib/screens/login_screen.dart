@@ -16,8 +16,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   bool showSpinner = false;
-  final _auth = FirebaseAuth.instance;
   late String email;
   late String password;
   bool _disableButton = true;
@@ -206,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: EdgeInsets.fromLTRB(30, 45, 0, 10)),
                             InkWell(
                               onTap: () {
-                                //Navigator.pushNamed(context, CalcScreen.id);
+                                Navigator.pushNamed(context, OlaScreen.id);
                               },
                               child: Text(
                                 "Esqueceu sua senha?",
@@ -232,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                                 try {
                                   final user =
-                                      await _auth.signInWithEmailAndPassword(
+                                      await auth.signInWithEmailAndPassword(
                                           email: email, password: password);
                                   if (user != null) {
                                     Navigator.pushNamed(context, OlaScreen.id);
@@ -240,8 +240,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   setState(() {
                                     showSpinner = true;
                                   });
-                                } catch (e) {
-                                  print(e);
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'Usuário não encontrado') {
+                                    print('Não existe usuário com este Email.');
+                                  } else if (e.code == 'Senha incorreta') {
+                                    print(
+                                        'Senha incorreta fornecida para esse usuário.');
+                                  }
                                 }
                               },
                             ),

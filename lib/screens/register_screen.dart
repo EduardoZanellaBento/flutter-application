@@ -15,7 +15,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _auth = FirebaseAuth.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
   bool showSpinner = false;
   late String email;
   late String password;
@@ -297,8 +297,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   showSpinner = true;
                                 });
                                 try {
-                                  final newUser = await _auth
-                                      .createUserWithEmailAndPassword(
+                                  final newUser =
+                                      await auth.createUserWithEmailAndPassword(
                                           email: email, password: password);
                                   if (newUser != null) {
                                     Navigator.pushNamed(context, OlaScreen.id);
@@ -306,6 +306,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   setState(() {
                                     showSpinner = true;
                                   });
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'senha-fraca') {
+                                    print('A senha é muito curta.');
+                                  } else if (e.code == 'email-ja-esta-em-uso') {
+                                    print('Este email já esta em uso.');
+                                  }
                                 } catch (e) {
                                   print(e);
                                 }
