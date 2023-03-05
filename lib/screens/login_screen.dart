@@ -112,6 +112,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           onChanged: (value) {
                             email = value;
                           },
+                          textInputAction: TextInputAction.next,
+                          onSubmitted: (value) {
+                            FocusScope.of(context).nextFocus();
+                          },
                           controller: _emailBlock,
                           focusNode: _emailFocus,
                           cursorColor: Colors.white,

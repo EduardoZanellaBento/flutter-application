@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_teste/screens/welcome_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -22,12 +23,15 @@ class _OlaScreenState extends State<OlaScreen> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-            title: const Text('Seja Bem-vindo'),
-            backgroundColor: Colors.black,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_rounded),
-              onPressed: () => Navigator.of(context).pop(),
-            )),
+          title: const Text('Seja Bem-vindo'),
+          backgroundColor: Colors.black,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () => Navigator.pushNamed(context, WelcomeSreen.id),
+            )
+          ],
+        ),
         backgroundColor: const Color(0xff1C1F22),
         body: Column(
           children: [
