@@ -19,6 +19,7 @@ class CalcMonstra extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        scaffoldMessengerKey: snackbarKey,
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeSreen.id,
         routes: {
