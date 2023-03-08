@@ -19,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   FirebaseAuth auth = FirebaseAuth.instance;
+
   final firestore = FirebaseFirestore.instance;
   bool showSpinner = false;
   late String email;
@@ -139,7 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                             validator: (value) {
                               if (!GetUtils.isEmail(value!)) {
-                                return "Email não cadastrado";
+                                return "Digite um email valido";
                               }
                             },
                             controller: _emailBlock,
@@ -328,9 +329,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   // }
                                   Navigator.pushNamed(context, OlaScreen.id);
                                 } on FirebaseAuthException catch (e) {
-                                  if (e.code == 'senha-fraca') {
+                                  if (e.code == 'wrong-password') {
                                     print('A senha é muito curta.');
-                                  } else if (e.code == 'email-ja-esta-em-uso') {
+                                  } else if (e.code == 'user-not-found') {
                                     print('Este email já esta em uso.');
                                   }
                                 } catch (e) {

@@ -6,20 +6,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../global.dart';
+
 class LoginScreen extends StatefulWidget {
   static String id = 'login_screen';
 
-  const LoginScreen({super.key});
+  const LoginScreen({key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
+  //var formKey = GlobalKey<FormState>();
   FirebaseAuth auth = FirebaseAuth.instance;
-  bool showSpinner = false;
+
   late String email;
   late String password;
   bool _disableButton = true;
@@ -72,19 +73,33 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void signUserIn() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+  // void signUserIn() async {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return const Center(
+  //           child: CircularProgressIndicator(),
+  //         );
+  //       });
+  // }
+  SnackBar _buildSnackBar(String message) {
+    return SnackBar(
+      content: Text(message),
+      duration: Duration(seconds: 3),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    // FirebaseAuth.instance.userChanges().listen((User? user) {
+    //   if (user == null) {
+    //     print('User is currently signed out!');
+    //   } else {
+    //     print('User is signed in!');
+    //   }
+    // });
     return MaterialApp(
+      scaffoldMessengerKey: snackbarKey,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
@@ -102,173 +117,163 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Center(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.only(bottom: 150),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Padding(
-                                padding: EdgeInsets.only(bottom: 35, left: 30)),
-                            Text(
-                              "Email",
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Padding(
+                              padding: EdgeInsets.only(bottom: 35, left: 30)),
+                          Text(
+                            "Email",
+                            style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15.5,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, right: 25),
+                        child: TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          onChanged: (value) {
+                            email = value;
+                          },
+                          textInputAction: TextInputAction.next,
+                          // onSubmitted: (value) {
+                          //   FocusScope.of(context).nextFocus();
+                          // },
+
+                          controller: _emailBlock,
+                          focusNode: _emailFocus,
+                          cursorColor: Colors.white,
+                          style: GoogleFonts.inter(
+                              fontSize: 16, color: Colors.white),
+                          decoration: InputDecoration(
+                            fillColor: _focoEmail
+                                ? Colors.black
+                                : const Color(0xff2E3338),
+                            filled: true,
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Padding(
+                              padding: EdgeInsets.only(bottom: 35, left: 30)),
+                          Text(
+                            "Senha",
+                            style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15.5,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, right: 25),
+                        child: TextFormField(
+                          onChanged: (value) {
+                            password = value;
+                          },
+                          controller: _senhaBlock,
+                          focusNode: _senhaFocus,
+                          style: GoogleFonts.inter(
+                              fontSize: 16, color: Colors.white),
+                          cursorColor: Colors.white,
+                          decoration: InputDecoration(
+                            suffixIcon: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                                child: _obscureText
+                                    ? const Icon(
+                                        Icons.visibility_off,
+                                        color: Color(0xffD8D3D8),
+                                      )
+                                    : const Icon(
+                                        Icons.visibility,
+                                        color: Color(0xffD8D3D8),
+                                      ),
+                              ),
+                            ),
+                            fillColor: _focoSenha
+                                ? Colors.black
+                                : const Color(0xff2E3338),
+                            filled: true,
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                          ),
+                          obscureText: _obscureText,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Padding(
+                              padding: EdgeInsets.fromLTRB(30, 45, 0, 10)),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, OlaScreen.id);
+                            },
+                            child: Text(
+                              "Esqueceu sua senha?",
                               style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15.5,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13.6,
                                   color: Colors.white),
                             ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 25, right: 25),
-                          child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            onChanged: (value) {
-                              email = value;
-                            },
-                            textInputAction: TextInputAction.next,
-                            // onSubmitted: (value) {
-                            //   FocusScope.of(context).nextFocus();
-                            // },
-                            validator: (value) {
-                              if (!GetUtils.isEmail(value!)) {
-                                return "Email não cadastrado";
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, right: 25),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.height,
+                          child: RoundedButton(
+                            disabled: _disableButton,
+                            title: 'Entrar',
+                            colour: const Color(0xff2E3338),
+                            Press: () async {
+                              try {
+                                //formKey.currentState!.validate();
+                                final user =
+                                    await auth.signInWithEmailAndPassword(
+                                        email: email, password: password);
+                                Navigator.pushNamed(context, OlaScreen.id);
+                              } on FirebaseAuthException catch (error) {
+                                String errorMessage =
+                                    'Ocorreu um erro ao fazer o login. Verifique suas credenciais e tente novamente.';
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(_buildSnackBar(errorMessage));
                               }
                             },
-                            controller: _emailBlock,
-                            focusNode: _emailFocus,
-                            cursorColor: Colors.white,
-                            style: GoogleFonts.inter(
-                                fontSize: 16, color: Colors.white),
-                            decoration: InputDecoration(
-                              fillColor: _focoEmail
-                                  ? Colors.black
-                                  : const Color(0xff2E3338),
-                              filled: true,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(12)),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 13,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Padding(
-                                padding: EdgeInsets.only(bottom: 35, left: 30)),
-                            Text(
-                              "Senha",
-                              style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15.5,
-                                  color: Colors.white),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 25, right: 25),
-                          child: TextField(
-                            onChanged: (value) {
-                              password = value;
-                            },
-                            controller: _senhaBlock,
-                            focusNode: _senhaFocus,
-                            style: GoogleFonts.inter(
-                                fontSize: 16, color: Colors.white),
-                            cursorColor: Colors.white,
-                            decoration: InputDecoration(
-                              suffixIcon: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _obscureText = !_obscureText;
-                                    });
-                                  },
-                                  child: _obscureText
-                                      ? const Icon(
-                                          Icons.visibility_off,
-                                          color: Color(0xffD8D3D8),
-                                        )
-                                      : const Icon(
-                                          Icons.visibility,
-                                          color: Color(0xffD8D3D8),
-                                        ),
-                                ),
-                              ),
-                              fillColor: _focoSenha
-                                  ? Colors.black
-                                  : const Color(0xff2E3338),
-                              filled: true,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(12)),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
-                            obscureText: _obscureText,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Padding(
-                                padding: EdgeInsets.fromLTRB(30, 45, 0, 10)),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(context, OlaScreen.id);
-                              },
-                              child: Text(
-                                "Esqueceu sua senha?",
-                                style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13.6,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 25, right: 25),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.height,
-                            child: RoundedButton(
-                              disabled: _disableButton,
-                              title: 'Entrar',
-                              colour: const Color(0xff2E3338),
-                              Press: () async {
-                                try {
-                                  formKey.currentState!.validate();
-                                  final user =
-                                      await auth.signInWithEmailAndPassword(
-                                          email: email, password: password);
-                                  Navigator.pushNamed(context, OlaScreen.id);
-                                } on FirebaseAuthException catch (e) {
-                                  if (e.code == 'user-not-found') {
-                                    print('Usuário com esse email não existe.');
-                                  } else if (e.code == 'wrong-password') {
-                                    print('Senha incorreta');
-                                  }
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

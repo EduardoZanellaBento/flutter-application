@@ -6,6 +6,7 @@ import 'package:flutter_application_teste/screens/ola_screen.dart';
 import 'package:flutter_application_teste/screens/login_screen.dart';
 import 'package:flutter_application_teste/screens/register_screen.dart';
 import 'package:flutter_application_teste/screens/welcome_screen.dart';
+import 'global.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
