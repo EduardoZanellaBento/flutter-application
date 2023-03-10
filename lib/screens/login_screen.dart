@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_teste/components/rounded_button.dart';
+import 'package:flutter_application_teste/screens/forgot_screen.dart';
 import 'package:flutter_application_teste/screens/ola_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -237,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: EdgeInsets.fromLTRB(30, 45, 0, 10)),
                         InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, OlaScreen.id);
+                            Navigator.pushNamed(context, ForgotScreen.id);
                           },
                           child: Text(
                             "Esqueceu sua senha?",
@@ -265,8 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       email: email, password: password);
                               Navigator.pushNamed(context, OlaScreen.id);
                             } on FirebaseAuthException catch (error) {
-                              String errorMessage =
-                                  'Email ou Senha incorretos.';
+                              String errorMessage = 'Email ou Senha inválidos.';
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(_buildSnackBar(errorMessage));
                             }

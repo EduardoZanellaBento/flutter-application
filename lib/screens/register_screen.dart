@@ -135,6 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           padding: const EdgeInsets.only(left: 25, right: 25),
                           child: TextFormField(
                             keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
                             onChanged: (value) {
                               email = value;
                             },
@@ -184,6 +185,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 25, right: 25),
                           child: TextFormField(
+                            textInputAction: TextInputAction.next,
                             validator: (value) {
                               if (value!.length < 6) {
                                 return 'Senha deve ter no mínimo 6 caracteres';

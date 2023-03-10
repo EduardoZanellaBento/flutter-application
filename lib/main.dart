@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application_teste/screens/forgot_screen.dart';
 import 'package:flutter_application_teste/services/auth_service.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class CalcMonstra extends StatelessWidget {
           WelcomeSreen.id: (context) => const WelcomeSreen(),
           LoginScreen.id: (context) => const LoginScreen(),
           RegisterScreen.id: (context) => const RegisterScreen(),
+          ForgotScreen.id: (context) => ForgotScreen(),
         });
   }
 }
