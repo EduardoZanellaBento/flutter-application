@@ -42,7 +42,7 @@ class _OlaScreenState extends State<OlaScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Olá :)",
+                      "VAI TOMA NO CU PIRANHAAAAAAAAA HEY HEY HEY HEY HEY",
                       style: GoogleFonts.amaticSc(
                         color: Colors.white,
                         fontSize: 35,

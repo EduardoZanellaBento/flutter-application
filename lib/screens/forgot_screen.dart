@@ -12,6 +12,12 @@ class ForgotScreen extends StatefulWidget {
 }
 
 class _ForgotScreenState extends State<ForgotScreen> {
+  late String password;
+  late String repeatPassword;
+  bool _disableButton = true;
+  final _passwordControler = TextEditingController();
+  final _repeatPasswordControler = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,7 +28,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
           backgroundColor: const Color(0xff1C1F22),
           title: const Text('Burrão, esqueceu a senha'),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded),
+            icon: const Icon(Icons.arrow_back_rounded),
             onPressed: () => Navigator.pop(context),
           ),
         ),
@@ -48,6 +54,8 @@ class _ForgotScreenState extends State<ForgotScreen> {
                           ),
                         ],
                       ),
+                      Padding(
+                          padding: const EdgeInsets.only(left: 25, right: 25)),
                     ],
                   ),
                 ),
